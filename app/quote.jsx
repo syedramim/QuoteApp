@@ -1,20 +1,28 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { Button, Card, Text } from 'react-native-paper'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { API_KEY, BASE_URL} from '@env'
+import CategoryPicker from './picker'
 
 const quote = () => {
   const [quote, setQuote] = useState()
+  const [category, setCategory] = useState('age')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const url = `${BASE_URL}?category=${category}`
 
   const fetchQuote = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(url)
-      console.log(response.data)
+      const response = await axios.get(url, 
+        {headers: {'X-Api-Key': API_KEY}}
+      )
+      console.log(category)
+
       if(response.data[0]) {
-        setQuote(response.data[0])
+        setQuote(response.data[0]) 
       } else {
         throw new Error('Unable to access Quote')
       }
@@ -31,7 +39,7 @@ const quote = () => {
 
   if(loading) {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>
           Loading...
         </Text>
@@ -41,7 +49,7 @@ const quote = () => {
 
   if(error) {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>
           {error}
         </Text>
@@ -51,50 +59,34 @@ const quote = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{quote.q}</Text>
-      <Text style={styles.text}>~{quote.a}</Text>
+      <CategoryPicker category={category} onCategoryChange={setCategory}/>
+
+      <Card>
+        <Card.Title title="Quote"/>
+        <Card.Content>
+          <Text variant='titleLarge'>{quote.quote}</Text>
+          <Text variant='bodyMedium'>{quote.author}</Text>
+        </Card.Content>
+      </Card>
 
       <Button
         onPress={fetchQuote}
-        title='New Quote'
-        color='gray'
-      />
+        mode='elevated'
+        loading = {loading}
+      > 
+        New Quote
+      </Button>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
-    padding: 40,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black'
-  },
-  text:{
-    fontSize: 24,
-    borderColor: 'gray',
-    borderWidth: 4,
-    borderRadius: 10,
-    fontWeight: 'bold',
-    width: 400,
-    marginBottom: 10,
-    textAlign: 'center', 
-    color: 'white'
-  },
-  author:{
-    fontSize: 16,
-    borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 5,
-    width: 200,
-    marginBottom: 30,
-    textAlign: 'center',
-    color: 'white'
-  },
-  button: {
-    width: 200,
-    height: 100
+    paddingBottom: 40,
+    alignContent: 'center',
+    alignItems: 'center'
   }
 })
 
