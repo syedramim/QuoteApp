@@ -1,42 +1,101 @@
-export const quotes = [
-    {
-      text: "The only way to do great work is to love what you do.",
-      author: "Steve Jobs"
-    },
-    {
-      text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-      author: "Winston Churchill"
-    },
-    {
-      text: "Everything you've ever wanted is on the other side of fear.",
-      author: "George Addair"
-    },
-    {
-      text: "The future belongs to those who believe in the beauty of their dreams.",
-      author: "Eleanor Roosevelt"
-    },
-    {
-      text: "I have not failed. I've just found 10,000 ways that won't work.",
-      author: "Thomas Edison"
-    },
-    {
-      text: "The way to get started is to quit talking and begin doing.",
-      author: "Walt Disney"
-    },
-    {
-      text: "Don't watch the clock; do what it does. Keep going.",
-      author: "Sam Levenson"
-    },
-    {
-      text: "The only limit to our realization of tomorrow will be our doubts of today.",
-      author: "Franklin D. Roosevelt"
-    },
-    {
-      text: "It does not matter how slowly you go as long as you do not stop.",
-      author: "Confucius"
-    },
-    {
-      text: "Everything is hard before it is easy.",
-      author: "Johann Wolfgang von Goethe"
+import { View, Text, StyleSheet, Button } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const quote = () => {
+  const [quote, setQuote] = useState()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+
+  const fetchQuote = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(url)
+      console.log(response.data)
+      if(response.data[0]) {
+        setQuote(response.data[0])
+      } else {
+        throw new Error('Unable to access Quote')
+      }
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
-  ];
+  }
+
+  useEffect(() => {
+    fetchQuote()
+  }, [])
+
+  if(loading) {
+    return (
+      <View style={styles.container}>
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    )
+  }
+
+  if(error) {
+    return (
+      <View style={styles.container}>
+        <Text>
+          {error}
+        </Text>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>{quote.q}</Text>
+      <Text style={styles.text}>~{quote.a}</Text>
+
+      <Button
+        onPress={fetchQuote}
+        title='New Quote'
+        color='gray'
+      />
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    padding: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black'
+  },
+  text:{
+    fontSize: 24,
+    borderColor: 'gray',
+    borderWidth: 4,
+    borderRadius: 10,
+    fontWeight: 'bold',
+    width: 400,
+    marginBottom: 10,
+    textAlign: 'center', 
+    color: 'white'
+  },
+  author:{
+    fontSize: 16,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 5,
+    width: 200,
+    marginBottom: 30,
+    textAlign: 'center',
+    color: 'white'
+  },
+  button: {
+    width: 200,
+    height: 100
+  }
+})
+
+export default quote

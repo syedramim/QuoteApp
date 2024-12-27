@@ -35,4 +35,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Environment files
+.env
+
+
 app-example
