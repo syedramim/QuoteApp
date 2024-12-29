@@ -1,5 +1,5 @@
 import React from 'react'
-import Quote from './quote' 
+import Quote from '../quote' 
 
 const index = () => {
   return (

@@ -2,7 +2,6 @@ import { View, StyleSheet } from 'react-native'
 import { Button, Card, Text } from 'react-native-paper'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { API_KEY, BASE_URL} from '@env'
 import CategoryPicker from './picker'
 
 const quote = () => {
@@ -11,13 +10,13 @@ const quote = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const url = `${BASE_URL}?category=${category}`
+  const url = `${process.env.EXPO_PUBLIC_BASE_URL}?category=${category}`
 
   const fetchQuote = async () => {
     try {
       setLoading(true)
       const response = await axios.get(url, 
-        {headers: {'X-Api-Key': API_KEY}}
+        {headers: {'X-Api-Key': process.env.EXPO_PUBLIC_API_KEY}}
       )
       console.log(category)
 
@@ -42,6 +41,7 @@ const quote = () => {
       <View>
         <Text>
           Loading...
+          {console.log(url)}
         </Text>
       </View>
     )
