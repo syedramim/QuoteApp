@@ -3,7 +3,7 @@ import { HomeIcon as Home,  HeartIcon as Heart } from "react-native-heroicons/so
 
 export default function TabLayout() {
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: 'gray'}} >
+        <Tabs screenOptions={{ tabBarActiveTintColor: 'gray', headerShown: false }} >
             <Tabs.Screen
                 name="index"
                 options={{
