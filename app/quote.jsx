@@ -1,57 +1,57 @@
-import { View, StyleSheet } from 'react-native'
-import { Button, Card, Text, Appbar } from 'react-native-paper'
-import { HeartIcon as Heart } from "react-native-heroicons/outline";
-import deviceDimensions from './deviceDimensions'
-import quoteViewModel from './ViewModels/quotesAPI'
-import Spacer from './components/Spacer'
-import dataViewModel from './ViewModels/dataViewModel'
+import { View, StyleSheet } from 'react-native';
+import { Button, Card, Text, Appbar } from 'react-native-paper';
+import { HeartIcon as Heart } from 'react-native-heroicons/outline';
+import quoteViewModel from './ViewModels/quotesAPI';
+import Spacer from './components/Spacer';
+import dataViewModel from './ViewModels/dataViewModel';
 
+const Quote = () => {
+  const { quote, loading, error, fetchQuote } = quoteViewModel();
+  const dataVM = dataViewModel();
 
-const quote = () => {
-  const { width, height} = deviceDimensions()
-  const { quote, loading, error, fetchQuote } = quoteViewModel()
-  const dataVM = dataViewModel()
-
-  if(loading) {
+  if (loading) {
     return (
-      <View>
-        <Text>
-          Loading...
-        </Text>
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
-    )
+    );
   }
 
-  if(error) {
+  if (error) {
     return (
-      <View>
-        <Text>
-          {`ERROR: ${error}`}
-        </Text>
+      <View style={styles.container}>
+        <Text style={styles.errorText}>{`ERROR: ${error}`}</Text>
       </View>
-    )
+    );
   }
 
   return (
     <View style={styles.container}>
-
-      <Appbar.Header>
-        <Appbar.Content title="Quotes" />
+      <Appbar.Header style={styles.appbar}>
+        <Appbar.Content title="Quotes" titleStyle={styles.title} />
       </Appbar.Header>
 
       <Spacer />
 
-      <Card>
-        <Card.Title title="Quote"/>
+      <Card style={styles.card}>
+        <Card.Title title="Quote" titleStyle={styles.cardTitle} />
         <Card.Content>
-          <Text variant='titleLarge'>{quote.quote}</Text>
-          <Text variant='bodyMedium'>{quote.author}</Text>
+          <Text variant="titleLarge" style={styles.quoteText}>
+            {quote.quote}
+          </Text>
+          <Text variant="bodyMedium" style={styles.authorText}>
+            {quote.author}
+          </Text>
         </Card.Content>
         <Card.Actions>
-          <Button 
-            icon={Heart} 
-            mode='elevated' 
-            onPress={() => dataVM.addItemToArray("@test", {q:quote.quote, a: quote.author})}
+          <Button
+            icon={Heart}
+            mode="elevated"
+            onPress={() =>
+              dataVM.addItemToArray('@test', { q: quote.quote, a: quote.author })
+            }
+            style={styles.button}
+            textColor="#FFFFFF"
           >
             Add To Favorites
           </Button>
@@ -62,25 +62,68 @@ const quote = () => {
 
       <Button
         onPress={fetchQuote}
-        mode='elevated'
-        loading = {loading}
-        style={{marginBottom: height*0.005}}
-      > 
+        mode="elevated"
+        loading={loading}
+        style={styles.newQuoteButton}
+        textColor="#FFFFFF"
+      >
         New Quote
       </Button>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
+    backgroundColor: '#2D3142',
+    padding: 16,
   },
-  spacer: {
-    flex: 1
+  appbar: {
+    backgroundColor: '#2D3142',
   },
-  
-})
+  title: {
+    color: '#F5F5F5',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  loadingText: {
+    color: '#F5F5F5',
+    textAlign: 'center',
+    marginTop: 16,
+  },
+  errorText: {
+    color: '#EF8354',
+    textAlign: 'center',
+    marginTop: 16,
+  },
+  card: {
+    marginBottom: 16,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    elevation: 3,
+  },
+  cardTitle: {
+    color: '#2D3142',
+    fontWeight: 'bold',
+  },
+  quoteText: {
+    color: '#2D3142',
+    marginBottom: 8,
+  },
+  authorText: {
+    color: '#2D3142',
+    fontStyle: 'italic',
+  },
+  button: {
+    backgroundColor: '#EF8354',
+  },
+  newQuoteButton: {
+    backgroundColor: '#EF8354',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 16,
+  },
+});
 
-export default quote
+export default Quote;

@@ -51,7 +51,7 @@ const dataViewModel = () => {
 
         if (parsedQuotesArray.length > 0) {
             console.log(value)
-            await AsyncStorage.setItem(key, JSON.stringify(parsedQuotesArray.filter(val => val != value)))
+            await AsyncStorage.setItem(key, JSON.stringify(parsedQuotesArray.filter(val => val.q != value.q)))
 
             console.log(`Removed: ${value} from ${key}`)
         }
