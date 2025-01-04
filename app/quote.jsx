@@ -3,11 +3,11 @@ import { Button, Card, Text, Appbar } from 'react-native-paper';
 import { HeartIcon as Heart } from 'react-native-heroicons/outline';
 import quoteViewModel from './ViewModels/quotesAPI';
 import Spacer from './components/Spacer';
-import dataViewModel from './ViewModels/dataViewModel';
+import { useData } from './ViewModels/DataViewModel'
 
 const Quote = () => {
   const { quote, loading, error, fetchQuote } = quoteViewModel();
-  const dataVM = dataViewModel();
+  const { addFavorite } = useData();
 
   if (loading) {
     return (
@@ -34,22 +34,17 @@ const Quote = () => {
       <Spacer />
 
       <Card style={styles.card}>
-        <Card.Title title="Quote" titleStyle={styles.cardTitle} />
+        <Card.Title title={quote.author} titleStyle={styles.cardTitle} />
         <Card.Content>
           <Text variant="titleLarge" style={styles.quoteText}>
             {quote.quote}
-          </Text>
-          <Text variant="bodyMedium" style={styles.authorText}>
-            {quote.author}
           </Text>
         </Card.Content>
         <Card.Actions>
           <Button
             icon={Heart}
             mode="elevated"
-            onPress={() =>
-              dataVM.addItemToArray('@test', { q: quote.quote, a: quote.author })
-            }
+            onPress={() => addFavorite({ q: quote.quote, a: quote.author })}
             style={styles.button}
             textColor="#FFFFFF"
           >

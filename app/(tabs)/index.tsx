@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Quote from '../quote' 
-import dataViewModel from '../ViewModels/dataViewModel'
 
 const index = () => {
   return (

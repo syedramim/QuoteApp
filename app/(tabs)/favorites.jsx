@@ -1,20 +1,10 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Appbar, Card, Text, Button } from 'react-native-paper';
-import React, { useEffect, useState } from 'react';
-import dataViewModel from '../ViewModels/dataViewModel';
+import React from 'react';
+import { useData } from '../ViewModels/DataViewModel';
 
 const Favorites = () => {
-  const dataVM = dataViewModel();
-  const [favoriteQuotes, setFavoriteQuotes] = useState([]);
-
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      const favorites = await dataVM.getQuoteArray("@test");
-      setFavoriteQuotes(favorites || []);
-    };
-
-    fetchFavorites();
-  }, []);
+  const { favorites, removeFavorite, resetFavorites } = useData()
 
   return (
     <View style={styles.container}>
@@ -22,9 +12,9 @@ const Favorites = () => {
         <Appbar.Content title="Favorites" titleStyle={styles.title} />
       </Appbar.Header>
 
-      <View style={styles.content}>
-        {favoriteQuotes && favoriteQuotes.length > 0 ? (
-          favoriteQuotes.map((quote, index) => (
+      <ScrollView style={styles.content}>
+        {favorites && favorites.length > 0 ? (
+          favorites.map((quote, index) => (
             <Card key={index} style={styles.card}>
               <Card.Title title={quote.a} titleStyle={styles.cardTitle} />
               <Card.Content>
@@ -32,9 +22,7 @@ const Favorites = () => {
               </Card.Content>
               <Card.Actions>
                 <Button
-                  onPress={() =>
-                    dataVM.removeItemToArray("@test", { q: quote.q, a: quote.a })
-                  }
+                  onPress={() => removeFavorite({ q: quote.q, a: quote.a })}
                   style={styles.button}
                   textColor="#FFFFFF"
                 >
@@ -46,11 +34,11 @@ const Favorites = () => {
         ) : (
           <Text style={styles.noFavorites}>No Favorites Added</Text>
         )}
-      </View>
+      </ScrollView>
 
       <Button
         mode="contained"
-        onPress={() => dataVM.resetQuotesArray("@test")}
+        onPress={resetFavorites}
         style={styles.resetButton}
         textColor="#FFFFFF"
       >

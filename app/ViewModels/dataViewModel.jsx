@@ -1,72 +1,63 @@
+import { useState, useEffect, useContext, createContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const dataViewModel = () => {
-  const setQuoteArray = async (key, value) => {
-    try {
-        await AsyncStorage.setItem(key, JSON.stringify(value))
-        console.log("Array has been created")
-    } catch (err) {
-        console.log(`ERROR: ${err}`)
+const FavoritesContext = createContext()
+
+export const DataViewModel = ({ children }) => {
+  const [favorites, setFavorites] = useState([])
+
+  //TODO: add validation of data before it gets read such that we don't have errors, especially for asyncstorage
+  useEffect(() => {
+    const getQuoteArray = async () => {
+      try {
+          const quotesArray = await AsyncStorage.getItem('@QuotesArray')
+          if (quotesArray != null) {
+            setFavorites(JSON.parse(quotesArray))
+            console.log(`Loading Favorites: ${favorites}`)
+          } else {
+            setFavorites([])
+          }
+      } catch (err) {
+          console.log(`ERROR: ${err}`)
+      }
+    }
+
+    getQuoteArray()
+  }, [])
+
+  useEffect(() => {
+    const setQuoteArray = async () => {
+      try {
+          await AsyncStorage.setItem('@QuotesArray', JSON.stringify(favorites))
+          console.log(`Favorites Changed to: ${favorites}`)
+      } catch (err) {
+          console.log(`ERROR: ${err}`)
+      }
+    }
+
+    setQuoteArray()
+  }, [favorites])
+
+  const addFavorite = (quote) => {
+    if(!favorites.some((fav) => fav.q === quote.q)){
+      setFavorites([...favorites, quote])
     }
   }
 
-  const getQuoteArray = async (key) => {
-    try {
-        const quotesArray = await AsyncStorage.getItem(key)
-
-        if (quotesArray != null) {
-            console.log(`Quotes Array: ${quotesArray}`)
-            return JSON.parse(quotesArray)
-        }
-    } catch (err) {
-        console.log(`ERROR: ${err}`)
-    }
+  const removeFavorite = (quote) => {
+    setFavorites(favorites.filter(val => val.q !== quote.q))
   }
 
-  const resetQuotesArray = async (key) => {
-    try {
-        await AsyncStorage.removeItem(key)
-        console.log("Successfully Deleted Array")
-    } catch (err) {
-        console.log(`ERROR: ${err}`)
-    }
+  const resetFavorites = () => {
+    setFavorites([])
   }
 
-  const addItemToArray = async (key, value) => {
-    try {
-        const quotesArray = await AsyncStorage.getItem(key)
-        const parsedQuotesArray = quotesArray ? JSON.parse(quotesArray) : []
-
-        await AsyncStorage.setItem(key, JSON.stringify([...parsedQuotesArray, value]))
-        console.log(`Added: ${value} to ${key}`)
-    } catch (err) {
-        console.log(`ERROR: ${err}`)
-    }
-  }
-
-  const removeItemToArray = async (key, value) => {
-    try {
-        const quotesArray = await AsyncStorage.getItem(key)
-        const parsedQuotesArray = quotesArray ? JSON.parse(quotesArray) : []
-
-        if (parsedQuotesArray.length > 0) {
-            console.log(value)
-            await AsyncStorage.setItem(key, JSON.stringify(parsedQuotesArray.filter(val => val.q != value.q)))
-
-            console.log(`Removed: ${value} from ${key}`)
-        }
-    } catch (err) {
-        console.log(`ERROR: ${err}`)
-    }
-  }
-
-  return {
-    setQuoteArray,
-    getQuoteArray,
-    resetQuotesArray,
-    addItemToArray,
-    removeItemToArray
-  }
+  return (
+    <FavoritesContext.Provider value={{ favorites, addFavorite, removeFavorite, resetFavorites}}>
+      {children}
+    </FavoritesContext.Provider>
+  )
+    
 }
 
-export default dataViewModel
+export const useData = () => useContext(FavoritesContext)

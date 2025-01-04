@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const quoteViewModel = (category) => {
+const quoteViewModel = () => {
     const [quote, setQuote] = useState()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
