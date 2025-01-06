@@ -39,8 +39,8 @@ A React Native + Expo application that allows users to fetch random quotes, mark
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/YourGitHubUsername/quotes-and-favorites.git
-    cd quotes-and-favorites
+    git clone https://github.com/syedramim/QuoteApp.git
+    cd QuoteApp
     ```
 
 2. **Install dependencies**:
