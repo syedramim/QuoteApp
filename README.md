@@ -20,7 +20,7 @@ A React Native + Expo application that allows users to fetch random quotes, mark
 - **Favorites Management**: Add quotes to favorites, view the list of favorite quotes, delete individual quotes, or reset the entire favorites list.
 - **Local Storage**: Persist favorite quotes using AsyncStorage to ensure data is retained between app sessions.
 - **Tab Navigation**: Seamless navigation between Quotes and Favorites screens using React Navigation.
-- **Responsive Design**: Adaptable layout for different device sizes with a minimalist, dark-themed UI.
+- **Responsive Design**: Adaptable layout for different device sizes with a minimalist-themed UI.
 
 ## Installation
 
