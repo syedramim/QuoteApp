@@ -4,15 +4,28 @@ A React Native + Expo application that allows users to fetch random quotes, mark
 
 ## Table of Contents
 1. [Overview](#overview)
-2. [Features](#features)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Technologies Used](#technologies-used)
-6. [Contributing](#contributing)
+2. [Video Demo](#demo)
+3. [Screenshots](#screenshots)
+4. [Features](#features)
+5. [Installation](#installation)
+6. [Usage](#usage)
+7. [Technologies Used](#technologies-used)
+8. [Contributing](#contributing)
 
 ## Overview
 
 **Quotes and Favorites App** is designed to provide users with inspirational quotes fetched from an external API. Users can add their favorite quotes to a local list, view them, and manage their favorites efficiently. The app emphasizes a smooth and visually appealing user experience with a focus on simplicity and functionality.
+
+## Demo
+
+<img src="demofiles/QuotesAppDemo.gif" height="500">
+
+## Screenshots
+
+<p float="left">
+  <img src="demofiles/QuoteScreen.jpg" height="400">
+  <img src="demofiles/FavoriteScreen.jpg" height="400">
+</p>
 
 ## Features
 
