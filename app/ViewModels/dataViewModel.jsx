@@ -6,7 +6,6 @@ const FavoritesContext = createContext()
 export const DataViewModel = ({ children }) => {
   const [favorites, setFavorites] = useState([])
 
-  //TODO: add validation of data before it gets read such that we don't have errors, especially for asyncstorage
   useEffect(() => {
     const getQuoteArray = async () => {
       try {
@@ -39,12 +38,16 @@ export const DataViewModel = ({ children }) => {
   }, [favorites])
 
   const addFavorite = (quote) => {
+    if (!quote) return
+
     if(!favorites.some((fav) => fav.q === quote.q)){
       setFavorites([...favorites, quote])
     }
   }
 
   const removeFavorite = (quote) => {
+    if (!quote) return
+
     setFavorites(favorites.filter(val => val.q !== quote.q))
   }
 
